@@ -1,5 +1,6 @@
 # 🌌 Universal AI Layer v4.0
 
+[![Latest Release](https://img.shields.io/github/v/release/NishantJLU/Universal-AI-Memory-Layer?color=blue&label=v4.0.0)](https://github.com/NishantJLU/Universal-AI-Memory-Layer/releases/tag/v4.0.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-005850?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
@@ -19,13 +20,14 @@ Unlike traditional vector databases, v4.0 introduces the **Triple-Hybrid Search*
 
 ---
 
-## ✨ Key Features
+## ✨ Key v4.0 Features
 
-- **🧠 Deep Code Intelligence:** AST-aware ingestion via `tree-sitter` to map logic, not just text.
+- **🧠 Deep Code Intelligence:** AST-aware ingestion via `tree-sitter`. Automatically builds **Call Graphs** and structural hierarchies (`File -> Class -> Function`).
+- **🔍 Impact Analysis Engine:** New recursive graph-walking engine that identifies cascading dependencies and architectural risks when core code is modified.
 - **⚙️ Autonomous Scalability:** Distributed background processing with **Celery + Redis** for massive codebase ingestion.
-- **🔍 Explainable AI (XAI):** Transparent score breakdowns and source citations for every recalled memory.
+- **🔦 Explainable AI (XAI):** Transparent score breakdowns and source citations for every recalled memory.
 - **🛡️ Proactive Watchdogs:** Real-time Slack/Discord alerts for architectural deviations or conflicting decisions.
-- **🏢 Enterprise Ready:** Multi-tenancy with **PostgreSQL Row-Level Security (RLS)** and high-speed semantic caching.
+- **🏢 Enterprise Ready:** Multi-tenancy with **PostgreSQL Row-Level Security (RLS)**, **OpenTelemetry** tracing, and high-speed **Semantic Caching**.
 - **🔒 Hybrid Privacy:** Toggle between OpenAI for speed and **Ollama** for air-gapped, local-first security.
 - **📊 Visual Dashboard:** Interactive React UI featuring a **Memory Constellation** visualization and conflict resolution suite.
 
@@ -38,6 +40,7 @@ Unlike traditional vector databases, v4.0 introduces the **Triple-Hybrid Search*
 | **Backend** | FastAPI (Python 3.13), SQLAlchemy (Async) |
 | **Database** | PostgreSQL, `pgvector`, Apache Age (Graph) |
 | **Task Queue** | Celery, Redis |
+| **Observability** | OpenTelemetry, Prometheus/Grafana |
 | **Frontend** | React, Vite, Tailwind CSS, `react-force-graph` |
 | **Ingestion** | `tree-sitter`, GitPython |
 
@@ -62,8 +65,8 @@ graph TD
 
 ### 1. Clone & Prepare
 ```bash
-git clone https://github.com/NishantJLU/Universal-AI-Layer.git
-cd Universal-AI-Layer
+git clone https://github.com/NishantJLU/Universal-AI-Memory-Layer.git
+cd Universal-AI-Memory-Layer
 cp .env.example .env   # Configure your API keys and providers
 ```
 
