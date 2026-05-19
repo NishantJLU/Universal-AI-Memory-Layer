@@ -1,66 +1,50 @@
-# Universal AI Layer v4.0
+Universal AI Layer v4.0
+Autonomous Intelligence Memory Platform for Engineering Teams
+What it is
+A high-performance, distributed memory platform that gives AI agents long-term context about complex software projects. It combines three search strategies — semantic vector search, keyword precision, and graph-based relationship mapping — into a unified "Triple-Hybrid" engine.
 
-## Autonomous Intelligence Memory Platform for Engineering Teams
+Key Features
 
-Universal AI Layer is a high-performance, distributed, and explainable memory platform designed to give AI agents long-term context about complex software projects. It combines semantic vector search, keyword precision, and graph-based relationship mapping into a single, unified "Triple-Hybrid" search engine.
+Triple-Hybrid Search — Combines semantic (vector), precision (keyword), and context (graph via Apache Age) search in one engine.
+Deep Code Intelligence — Uses tree-sitter for AST-aware ingestion to map code logic and dependencies.
+Autonomous Scalability — Distributed background workers via Celery + Redis for heavy processing.
+Explainable AI (XAI) — Every memory result comes with score breakdowns and source citations.
+Proactive Watchdogs — Real-time Slack/Discord alerts for architectural deviations and conflicts.
+Enterprise Ready — Multi-tenancy with PostgreSQL Row-Level Security (RLS) and semantic caching.
+Hybrid Privacy — Supports both OpenAI API and local LLMs (Ollama) for sensitive projects.
+Visual Dashboard — Interactive React UI for memory constellation visualization and conflict resolution.
 
-### 🚀 Key Features
 
-*   **Triple-Hybrid Search:** Semantic (Vector) + Precision (Keyword) + Context (Graph - Apache Age).
-*   **Deep Code Intelligence:** AST-aware ingestion using `tree-sitter` to map code logic and dependencies.
-*   **Autonomous Scalability:** Distributed background workers (Celery + Redis) for heavy processing tasks.
-*   **Explainable AI (XAI):** Full transparency with score breakdowns and source citations for every memory.
-*   **Proactive Watchdogs:** Real-time Slack/Discord alerts for architectural deviations and conflicts.
-*   **Enterprise Ready:** Multi-tenancy with Postgres Row-Level Security (RLS) and semantic caching.
-*   **Hybrid Privacy:** Support for both OpenAI and local LLMs (Ollama) for sensitive projects.
-*   **Visual Workspace:** Interactive React dashboard for memory constellation visualization and conflict resolution.
+Tech Stack
+LayerTechnologyBackendFastAPI (Python 3.13)DatabasePostgreSQL + pgvector + Apache Age (Graph)Async ProcessingCelery + RedisFrontendReact + Vite + Tailwind CSS + react-force-graphAIOpenAI API / Ollama (local)
 
-### 🛠️ Architecture
+Quick Start
+bash# 1. Clone
+git clone https://github.com/YOUR_USERNAME/universal-ai-layer.git
+cd universal-ai-layer
 
-*   **Backend:** FastAPI (Python 3.13)
-*   **Database:** PostgreSQL with `pgvector` and `Apache Age` (Graph)
-*   **Async Processing:** Celery + Redis
-*   **Frontend:** React + Vite + Tailwind CSS + react-force-graph
-*   **AI Orchestration:** OpenAI API / Ollama (Local)
+# 2. Set env vars
+cp .env.example .env   # fill in your keys
 
-### 🚦 Quick Start
+# 3. Launch infrastructure
+docker-compose up -d
 
-1.  **Clone the Repository:**
-    ```bash
-    git clone https://github.com/YOUR_USERNAME/universal-ai-layer.git
-    cd universal-ai-layer
-    ```
+# 4. Start API
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python src/main.py
 
-2.  **Set Environment Variables:**
-    Copy `.env.example` to `.env` and fill in your keys.
-    ```bash
-    cp .env.example .env
-    ```
+# 5. Run dashboard
+cd dashboard && npm install && npm run dev
 
-3.  **Launch Infrastructure:**
-    ```bash
-    docker-compose up -d
-    ```
-
-4.  **Start API:**
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # or .\venv\Scripts\activate on Windows
-    pip install -r requirements.txt
-    python src/main.py
-    ```
-
-5.  **Run Dashboard:**
-    ```bash
-    cd dashboard
-    npm install
-    npm run dev
-    ```
-
-### 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-### 📄 License
-
-MIT License - Created by **NishantJLU**
+Project Structure
+├── src/           # Python backend (FastAPI)
+├── dashboard/     # React frontend
+├── tests/         # Test suite
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+└── .env.example
+License: MIT — Created by NishantJLU
+Contributions: Pull requests welcome.
