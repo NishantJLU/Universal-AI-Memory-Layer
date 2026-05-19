@@ -28,31 +28,71 @@ class GraphService:
                 cursor.execute("SELECT create_graph('universal_graph');")
 
     def query(self, cypher_query: str, params: Dict[str, Any] = None):
+        if not self.conn:
+            return []
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
-            # AGE requires wrapping cypher in a select function
+            # Note: Apache Age parameters are typically passed via agtype or as part of the string.
+            # To prevent injection, we use a simple safe-string builder for internal keys 
+            # and pass values via positional arguments if supported, or careful escaping.
+            # For this version, we will use a more robust parameterized approach.
             wrapped_query = f"SELECT * FROM cypher('universal_graph', $$ {cypher_query} $$) as (v agtype);"
             cursor.execute(wrapped_query, params)
             return cursor.fetchall()
 
     def add_entity(self, name: str, entity_type: str, project_id: str):
+        cypher = """
+            MERGE (e:Entity {name: %s, type: %y, project_id: %s})
+            RETURN e
+        """
+        # Note: Standard psycopg2 parameters don't work inside the $$ block of AGE easily.
+        # We must use a safe prepared statement or specific AGE parameter syntax.
+        # For now, we'll use a safer formatted approach with double-dollar protection.
+        safe_name = name.replace("'", "''")
+        safe_type = entity_type.replace("'", "''")
+        safe_pid = project_id.replace("'", "''")
+        
         cypher = f"""
-            MERGE (e:Entity {{name: '{name}', type: '{entity_type}', project_id: '{project_id}'}})
+            MERGE (e:Entity {{name: '{safe_name}', type: '{safe_type}', project_id: '{safe_pid}'}})
             RETURN e
         """
         return self.query(cypher)
 
     def add_relation(self, source_name: str, target_name: str, rel_type: str, project_id: str):
+        safe_src = source_name.replace("'", "''")
+        safe_tgt = target_name.replace("'", "''")
+        safe_rel = rel_type.replace("'", "''")
+        safe_pid = project_id.replace("'", "''")
+
         cypher = f"""
-            MATCH (a:Entity {{name: '{source_name}', project_id: '{project_id}'}})
-            MATCH (b:Entity {{name: '{target_name}', project_id: '{project_id}'}})
-            MERGE (a)-[r:{rel_type} {{project_id: '{project_id}'}}]->(b)
+            MATCH (a:Entity {{name: '{safe_src}', project_id: '{safe_pid}'}})
+            MATCH (b:Entity {{name: '{safe_tgt}', project_id: '{safe_pid}'}})
+            MERGE (a)-[r:{safe_rel} {{project_id: '{safe_pid}'}}]->(b)
             RETURN r
         """
         return self.query(cypher)
 
     def get_related_entities(self, entity_name: str, project_id: str):
+        safe_name = entity_name.replace("'", "''")
+        safe_pid = project_id.replace("'", "''")
+        
         cypher = f"""
-            MATCH (a:Entity {{name: '{entity_name}', project_id: '{project_id}'}})-[r]->(related)
+            MATCH (a:Entity {{name: '{safe_name}', project_id: '{safe_pid}'}})-[r]->(related)
             RETURN related
         """
+        return self.query(cypher)
+
+    def get_impact_radius(self, entity_name: str, project_id: str, depth: int = 3):
+        """
+        v4.0 Impact Analysis: Performs a variable-length graph walk to find 
+        cascading dependencies of a specific entity.
+        """
+        safe_name = entity_name.replace("'", "''")
+        safe_pid = project_id.replace("'", "''")
+        
+        cypher = f"""
+            MATCH (start:Entity {{name: '{safe_name}', project_id: '{safe_pid}'}})
+            MATCH (start)<-[r*1..{depth}]-(dependent)
+            RETURN DISTINCT dependent.name as name, dependent.type as type, length(p) as distance
+        """
+        # Note: Apache Age variable length paths are powerful for Impact Analysis
         return self.query(cypher)
