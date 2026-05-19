@@ -97,7 +97,7 @@ npm run dev
 ├── tests/         # Comprehensive Async Test Suite
 ├── Dockerfile     # Optimized multi-stage build
 ├── requirements.txt
-└── docker-compose.yml
+└── .env.example
 ```
 
 ---
